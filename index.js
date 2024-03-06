@@ -34,7 +34,7 @@ app.post(`/${SERVICE_NAME}/email`, async (req, res) => {
     }
 });
 
-app.get(`/${SERVICE_NAME}/mit/faculty`, async (req, res) => {
+app.get(`/${SERVICE_NAME}/stanford/faculty`, async (req, res) => {
     try {
         const result = await getFaculty();
         res.status(200).json({
@@ -42,7 +42,7 @@ app.get(`/${SERVICE_NAME}/mit/faculty`, async (req, res) => {
         });
     } catch (error) {
         console.error({
-            id: `/${APP_NAME}/mit/faculty`,
+            id: `/${APP_NAME}/stanford/faculty`,
             message: "failed to fetch faculty",
         });
         //return response to client
