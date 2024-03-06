@@ -4,27 +4,29 @@ import * as cheerio from "cheerio";
 
 async function fetchFacultyList() {
     const html = await fetchHtmlContent(STANFORD_FACULTY_PAGE);
-    const $ = cheerio.load(html);
-    const facultyData = {};
 
-    $("h3").each((index, element) => {
-        const facultyName = $(element).text().trim();
-        const facultyNode = $(element).next(".col-xs-6");
+    const $ = cheerio.load(html);
+    const facultyList = [];
+
+    $(".faculty-photoboard-card").each((index, element) => {
+        const name = $(element).find("strong a").text().trim();
+        const url = $(element).find("a").attr("href");
+        const title = $(element)
+            .find(".field-name-field-acad-title .field-item")
+            .text()
+            .trim();
 
         const facultyInfo = {
-            name: facultyNode.find("div strong a").text().trim(),
-            image: facultyNode.find("div img").attr("src"),
-            title: facultyNode
-                .find(".field-name-field-acad-title .field-item")
-                .text()
-                .trim(),
-            url: facultyNode.find("div strong a").attr("href"),
+            name,
+            url,
+            title,
         };
 
-        facultyData[facultyName] = facultyInfo;
+        facultyList.push(facultyInfo);
     });
 
-    return facultyData;
+    const output = { Faculty: facultyList };
+    return output
 }
 
 const fetchHtmlContent = (url) => {
