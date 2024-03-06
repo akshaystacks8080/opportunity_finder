@@ -1,6 +1,7 @@
 import { STANFORD_FACULTY_PAGE } from "../commons/constants.js";
 import request from "request";
 import * as cheerio from "cheerio";
+import { BASE_URL } from "../commons/constants.js";
 
 async function fetchFacultyList() {
     const html = await fetchHtmlContent(STANFORD_FACULTY_PAGE);
@@ -26,7 +27,37 @@ async function fetchFacultyList() {
     });
 
     const output = { Faculty: facultyList };
-    return output
+    return output;
+}
+
+async function getFacultyDetails(professorName) {
+    const professors = await fetchFacultyList();
+    const professor = professors.Faculty.find(
+        (prof) => prof.name.toLowerCase() === professorName.toLowerCase()
+    );
+    const html = await fetchHtmlContent(`${BASE_URL}${professor.url}`);
+
+
+    const $ = cheerio.load(html);
+
+    const facultyInfo = {
+        Biography: $("#bio-block + .read-more-target").text().trim(),
+        OtherTitles: $(".field-name-field-acad-title .field-item")
+            .text()
+            .trim(),
+        ProgramAffiliations: $(
+            ".field-name-field-program-affiliation .field-item"
+        )
+            .map((index, element) => $(element).text().trim())
+            .get(),
+        ResearchInterests: $('h3:contains("Research Interests") + div p')
+            .text()
+            .trim(),
+        RecentPublications: $('h3:contains("Recent Publications") + div p')
+            .map((index, element) => $(element).text().trim())
+            .get(),
+    };
+    return facultyInfo
 }
 
 const fetchHtmlContent = (url) => {
@@ -43,4 +74,4 @@ const fetchHtmlContent = (url) => {
     });
 };
 
-export { fetchFacultyList };
+export { fetchFacultyList, getFacultyDetails };

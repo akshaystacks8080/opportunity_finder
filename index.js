@@ -4,6 +4,8 @@ import bodyParser from "body-parser";
 import { APP_NAME, APP_PORT, SERVICE_NAME } from "./commons/constants.js";
 import { getFaculty } from "./services/s-service.js";
 import { generateEmail } from "./ai/email-ai.js";
+import { getFacultyDetails } from "./services/scraper-service.js";
+
 
 const app = express();
 
@@ -45,6 +47,25 @@ app.get(`/${SERVICE_NAME}/stanford/faculty`, async (req, res) => {
             {
                 id: `/${APP_NAME}/stanford/faculty`,
                 message: "failed to fetch faculty",
+            },
+            error
+        );
+        //return response to client
+        res.status(500).json({ error: "failed to fetch faculty" });
+    }
+});
+
+app.get(`/${SERVICE_NAME}/stanford/faculty-details`, async (req, res) => {
+    try {
+        const result = await getFacultyDetails(req.query.professorName);
+        res.status(200).json({
+            result,
+        });
+    } catch (error) {
+        console.error(
+            {
+                id: `/${SERVICE_NAME}/stanford/faculty-details`,
+                message: "failed to fetch faculty details",
             },
             error
         );
