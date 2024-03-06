@@ -1,3 +1,5 @@
+import { fetchFacultyList } from "./scraper-service.js";
+
 async function getFaculty(){
     //structured log
     console.log({
@@ -5,7 +7,7 @@ async function getFaculty(){
         message:'fetching faculty',
     });
     //TODO: implement
-    return [];
+    return fetchFacultyList();
 }
 
 export {getFaculty}

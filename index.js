@@ -26,7 +26,7 @@ app.post(`/${SERVICE_NAME}/email`, async (req, res) => {
                 id: `/${SERVICE_NAME}/email`,
                 message: "failed to generate email",
             },
-            // printing the error stacktrace 
+            // printing the error stacktrace
             error
         );
         //return response to client
@@ -41,10 +41,13 @@ app.get(`/${SERVICE_NAME}/stanford/faculty`, async (req, res) => {
             result,
         });
     } catch (error) {
-        console.error({
-            id: `/${APP_NAME}/stanford/faculty`,
-            message: "failed to fetch faculty",
-        });
+        console.error(
+            {
+                id: `/${APP_NAME}/stanford/faculty`,
+                message: "failed to fetch faculty",
+            },
+            error
+        );
         //return response to client
         res.status(500).json({ error: "failed to fetch faculty" });
     }
