@@ -37,10 +37,10 @@ async function getFacultyDetails(professorName) {
     );
     const html = await fetchHtmlContent(`${BASE_URL}${professor.url}`);
 
-
     const $ = cheerio.load(html);
 
     const facultyInfo = {
+        Name: professorName,
         Biography: $("#bio-block + .read-more-target").text().trim(),
         OtherTitles: $(".field-name-field-acad-title .field-item")
             .text()
@@ -53,13 +53,13 @@ async function getFacultyDetails(professorName) {
         ResearchInterests: $('h3:contains("Research Interests") + div p')
             .text()
             .trim()
-            .split('|')
-            .map(item => item.trim()),
+            .split("|")
+            .map((item) => item.trim()),
         RecentPublications: $('h3:contains("Recent Publications") + div p')
             .map((index, element) => $(element).text().trim())
             .get(),
     };
-    return facultyInfo
+    return facultyInfo;
 }
 
 const fetchHtmlContent = (url) => {
