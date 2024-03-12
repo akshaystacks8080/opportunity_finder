@@ -52,7 +52,9 @@ async function getFacultyDetails(professorName) {
             .get(),
         ResearchInterests: $('h3:contains("Research Interests") + div p')
             .text()
-            .trim(),
+            .trim()
+            .split('|')
+            .map(item => item.trim()),
         RecentPublications: $('h3:contains("Recent Publications") + div p')
             .map((index, element) => $(element).text().trim())
             .get(),
