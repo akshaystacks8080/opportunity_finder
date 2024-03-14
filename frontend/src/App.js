@@ -11,16 +11,17 @@ function App() {
   };
 
   return (
-    <div>
-      <header>
+    <div className="of-panel">
+      <header className="of-header">
         <h1>Opportunity Finder</h1>
 
         <p>
           Tool for helping professors collaborate and find similar research
-          partners
+          partners.
         </p>
       </header>
-      <div>
+      <div className="of-controls">
+        <h3 className="of-control-label">Select Professor</h3>
         <Dropdown
           options={options}
           onChange={onSelect}
