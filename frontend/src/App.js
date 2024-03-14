@@ -1,14 +1,29 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import "./App.css";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
+import { API_ENDPOINTS } from "./commons/constants";
 
 function App() {
-  const options = ["one", "two", "three"];
-  const defaultOption = options[0];
+  const [facultyList, setFacultyList] = useState([]);
 
   const onSelect = (value) => {
     console.log("onSelect", value);
   };
+
+  useEffect(() => {
+    axios
+      .get(API_ENDPOINTS.FACULTY)
+      .then((response) => {
+        console.log({ response: response.data });
+        const facultyNames = response?.data?.result?.Faculty.map((f) => f.name);
+        setFacultyList(facultyNames);
+      })
+      .catch((error) => {
+        console.log("Failed to fetch faculty", error);
+      });
+  });
 
   return (
     <div className="of-panel">
@@ -23,9 +38,9 @@ function App() {
       <div className="of-controls">
         <h3 className="of-control-label">Select Professor</h3>
         <Dropdown
-          options={options}
+          options={facultyList}
+          value={facultyList?.[0]}
           onChange={onSelect}
-          value={defaultOption}
           placeholder="Select an option"
         />
       </div>
