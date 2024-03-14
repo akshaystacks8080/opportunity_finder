@@ -7,9 +7,15 @@ import { API_ENDPOINTS } from "./commons/constants";
 
 function App() {
     const [facultyList, setFacultyList] = useState([]);
+    const [collaboratorList, setCollaboratorList] = useState([]);
+    const [professor, setProfessor] = useState();
+    const [collaborator, setCollaborator] = useState();
 
-    const onSelect = (value) => {
-        console.log("onSelect", value);
+    const onSelectProfessor = (value) => {
+        setProfessor(value);
+    };
+    const onSelectCollaborator = (value) => {
+        setCollaborator(value);
     };
 
     useEffect(() => {
@@ -21,11 +27,18 @@ function App() {
                     (f) => f.name
                 );
                 setFacultyList(facultyNames);
+                const clist = facultyNames.filter((f) => f !== professor);
+                setCollaboratorList(clist);
             })
             .catch((error) => {
                 console.log("Failed to fetch faculty", error);
             });
     });
+
+    useEffect(() => {
+        const clist = facultyList.filter((f) => f !== professor);
+        setCollaboratorList(clist);
+    }, professor);
 
     return (
         <div className="of-panel">
@@ -41,16 +54,16 @@ function App() {
                 <h3 className="of-control-label">Select Professor</h3>
                 <Dropdown
                     options={facultyList}
-                    value={facultyList?.[0]}
-                    onChange={onSelect}
+                    value={professor}
+                    onChange={onSelectProfessor}
                     placeholder="Select an option"
                 />
                 <h3 className="of-control-label">Select Collaborator</h3>
 
                 <Dropdown
-                    options={facultyList}
-                    value={facultyList?.[0]}
-                    onChange={onSelect}
+                    options={collaboratorList}
+                    value={collaborator}
+                    onChange={onSelectCollaborator}
                     placeholder="Select an option"
                 />
             </div>
